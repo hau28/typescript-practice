@@ -30,22 +30,22 @@ const initialState: ShopPage = {
   cartItems: [],
 };
 
-export const fetchShopPage = createAsyncThunk(
-  "shop/fetchShopPage",
-  async (limit: number) => {
-    const resp = await axios.get(
-      `https://fakestoreapi.com/products?limit=${limit}`
-    );
-    const Items: Item[] = resp.data.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      price: item.price,
-      desc: item.description,
-      img: item.image,
-    }));
-    return Items;
-  }
-);
+// export const fetchShopPage = createAsyncThunk(
+//   "shop/fetchShopPage",
+//   async (limit: number) => {
+//     const resp = await axios.get(
+//       `https://fakestoreapi.com/products?limit=${limit}`
+//     );
+//     const Items: Item[] = resp.data.map((item: any) => ({
+//       id: item.id,
+//       title: item.title,
+//       price: item.price,
+//       desc: item.description,
+//       img: item.image,
+//     }));
+//     return Items;
+//   }
+// );
 
 export const shopSlice = createSlice({
   name: "shop",
@@ -94,17 +94,56 @@ export const shopSlice = createSlice({
         (item) => item.idItem !== action.payload
       );
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchShopPage.fulfilled, (state, action) => {
+    fetchedShopPage: (state, action: PayloadAction<Item[]>) => {
       state.items = action.payload.map((item) => ({
         ...item,
         nextQuantity: 1,
       }));
-    });
+    },
   },
+  // extraReducers: (builder) => {
+  //   builder.addCase(fetchShopPage.fulfilled, (state, action) => {
+  //     state.items = action.payload.map((item) => ({
+  //       ...item,
+  //       nextQuantity: 1,
+  //     }));
+  //   });
+  // },
 });
+
+// export const fetchShopPage = createAsyncThunk(
+//   "shop/fetchShopPage",
+//   async (limit: number) => {
+//     const resp = await axios.get(
+//       `https://fakestoreapi.com/products?limit=${limit}`
+//     );
+//     const Items: Item[] = resp.data.map((item: any) => ({
+//       id: item.id,
+//       title: item.title,
+//       price: item.price,
+//       desc: item.description,
+//       img: item.image,
+//     }));
+//     return Items;
+//   }
+// );
 
 export const shopActions = shopSlice.actions;
 
 export const shopReducer = shopSlice.reducer;
+
+export function fetchShopPage(limit: number) {
+  return async function (dispatch: AppDispatch) {
+    const resp = await axios.get(
+      `https://fakestoreapi.com/products?limit=${limit}`
+    );
+    const Items: Item[] = resp.data.map((item: any) => ({
+      id: item.id,
+      title: item.title,
+      price: item.price,
+      desc: item.description,
+      img: item.image,
+    }));
+    dispatch(shopActions.fetchedShopPage(Items));
+  };
+}
