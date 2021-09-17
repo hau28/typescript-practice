@@ -2,6 +2,7 @@ import { AppDispatch, useAppDispatch } from "./../store";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import axios from "axios";
+import { put, call, takeEvery } from "redux-saga/effects";
 
 interface Item {
   id: number;
@@ -101,6 +102,7 @@ export const shopSlice = createSlice({
       }));
     },
   },
+  // CREATE ASYNC THUNK
   // extraReducers: (builder) => {
   //   builder.addCase(fetchShopPage.fulfilled, (state, action) => {
   //     state.items = action.payload.map((item) => ({
@@ -111,9 +113,38 @@ export const shopSlice = createSlice({
   // },
 });
 
-// export const fetchShopPage = createAsyncThunk(
-//   "shop/fetchShopPage",
-//   async (limit: number) => {
+export const shopActions = shopSlice.actions;
+
+export const shopReducer = shopSlice.reducer;
+
+function* fetchShopPage(action: PayloadAction<number>): any {
+  try {
+    const resp = yield call(() => {
+      return axios.get(
+        `https://fakestoreapi.com/products?limit=${action.payload}`
+      );
+    });
+
+    const Items: Item[] = resp.data.map((item: any) => ({
+      id: item.id,
+      title: item.title,
+      price: item.price,
+      desc: item.description,
+      img: item.image,
+    }));
+    yield put(shopActions.fetchedShopPage(Items));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* shopSaga() {
+  yield takeEvery("shop/fetchShopPage", fetchShopPage);
+}
+
+// REDUX-THUNK
+// export function fetchShopPage(limit: number) {
+//   return async function (dispatch: AppDispatch) {
 //     const resp = await axios.get(
 //       `https://fakestoreapi.com/products?limit=${limit}`
 //     );
@@ -124,26 +155,6 @@ export const shopSlice = createSlice({
 //       desc: item.description,
 //       img: item.image,
 //     }));
-//     return Items;
-//   }
-// );
-
-export const shopActions = shopSlice.actions;
-
-export const shopReducer = shopSlice.reducer;
-
-export function fetchShopPage(limit: number) {
-  return async function (dispatch: AppDispatch) {
-    const resp = await axios.get(
-      `https://fakestoreapi.com/products?limit=${limit}`
-    );
-    const Items: Item[] = resp.data.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      price: item.price,
-      desc: item.description,
-      img: item.image,
-    }));
-    dispatch(shopActions.fetchedShopPage(Items));
-  };
-}
+//     dispatch(shopActions.fetchedShopPage(Items));
+//   };
+// }

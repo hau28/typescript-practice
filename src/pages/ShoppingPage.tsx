@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { fetchShopPage, shopActions } from "../slices/shopSlice";
+import { shopActions } from "../slices/shopSlice";
 import { useAppDispatch, useAppSelector } from "../store";
 
 export default function ShoppingPage() {
   const shopPage = useAppSelector((state) => state.shop);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchShopPage(5));
+    dispatch({ type: "shop/fetchShopPage", payload: 8 });
   }, []);
 
   function renderCartList() {
