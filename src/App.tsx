@@ -1,5 +1,8 @@
 import { useEffect } from "react";
+import { Provider } from "react-redux";
 import "./App.css";
+import ShoppingPage from "./pages/ShoppingPage";
+import { store } from "./store";
 
 function hello(
   personOrPeople: string[] | string = "random dude",
@@ -128,51 +131,54 @@ function makePersonReadonly(person: Person): ReadonlyPerson {
 }
 
 function App() {
-  useEffect(() => {
-    hello(["Hau", "Linh"], new Date(), "cloudy");
-    printCoor({ x: 3 });
-    printId("123");
-    const fish: Fish = {
-      type: "fish",
-      swim: () => {
-        console.log("swiming");
-      },
-    };
-    // fish.type = "not fish";
-    move(fish);
-    console.log(isFish(fish));
-    const fnwithdesc: FunctionWithDesc = (num) => {
-      return num % 2 === 0;
-    };
-    fnwithdesc.desc = "Is even number function";
+  // useEffect(() => {
+  //   hello(["Hau", "Linh"], new Date(), "cloudy");
+  //   printCoor({ x: 3 });
+  //   printId("123");
+  //   const fish: Fish = {
+  //     type: "fish",
+  //     swim: () => {
+  //       console.log("swiming");
+  //     },
+  //   };
+  //   // fish.type = "not fish";
+  //   move(fish);
+  //   console.log(isFish(fish));
+  //   const fnwithdesc: FunctionWithDesc = (num) => {
+  //     return num % 2 === 0;
+  //   };
+  //   fnwithdesc.desc = "Is even number function";
 
-    doSomething(fnwithdesc);
-    console.log(longer("abcd", "yowtfman"));
-    console.log(longer([1, 2, 3, 5], [7, 6, 8, 2, 3, 6, 4]));
-    console.log(combine<string | number>([1, 4, 6, 7], ["how", "nice"]));
-    console.log(
-      calc((a) => {
-        return a;
-      })
-    );
-    console.log(sumThreeNum({ a: 1, b: 2, c: 3 }));
-    console.log(returnTrue());
-    drawSquare({ x: 5 });
-    // console.log(longer(10,100));
+  //   doSomething(fnwithdesc);
+  //   console.log(longer("abcd", "yowtfman"));
+  //   console.log(longer([1, 2, 3, 5], [7, 6, 8, 2, 3, 6, 4]));
+  //   console.log(combine<string | number>([1, 4, 6, 7], ["how", "nice"]));
+  //   console.log(
+  //     calc((a) => {
+  //       return a;
+  //     })
+  //   );
+  //   console.log(sumThreeNum({ a: 1, b: 2, c: 3 }));
+  //   console.log(returnTrue());
+  //   drawSquare({ x: 5 });
+  //   // console.log(longer(10,100));
 
-    // const message = "hello";
-    // message();
-    // const user = {
-    //   name: "hau",
-    //   age: 21,
-    // };
-    // console.log(user.creditCardNumber);
-    // const randomBool = Math.random < 0.5
-  }, []);
+  //   // const message = "hello";
+  //   // message();
+  //   // const user = {
+  //   //   name: "hau",
+  //   //   age: 21,
+  //   // };
+  //   // console.log(user.creditCardNumber);
+  //   // const randomBool = Math.random < 0.5
+  // }, []);
   return (
-    <div className="App">
-      <h1>Typescript practice</h1>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <h1>Typescript practice</h1>
+        <ShoppingPage />
+      </div>
+    </Provider>
   );
 }
 
