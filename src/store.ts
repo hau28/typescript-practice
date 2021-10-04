@@ -1,8 +1,9 @@
-import { shopReducer, shopSaga } from "./slices/shopSlice";
+import { shopReducer } from "./slices/shopSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import thunkMiddleware from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
+import { rootSaga } from "./slices";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -14,7 +15,7 @@ export const store = configureStore({
     getDefaultMiddleware().prepend(thunkMiddleware).prepend(sagaMiddleware),
 });
 
-sagaMiddleware.run(shopSaga);
+sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

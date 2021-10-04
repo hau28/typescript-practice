@@ -31,6 +31,8 @@ const initialState: ShopPage = {
   cartItems: [],
 };
 
+// Side effect using redux toolkit
+
 // export const fetchShopPage = createAsyncThunk(
 //   "shop/fetchShopPage",
 //   async (limit: number) => {
@@ -102,7 +104,9 @@ export const shopSlice = createSlice({
       }));
     },
   },
-  // CREATE ASYNC THUNK
+  // Side effect using redux toolkit
+
+  // REDUX THUNK USING createAsyncThunk
   // extraReducers: (builder) => {
   //   builder.addCase(fetchShopPage.fulfilled, (state, action) => {
   //     state.items = action.payload.map((item) => ({
@@ -116,6 +120,8 @@ export const shopSlice = createSlice({
 export const shopActions = shopSlice.actions;
 
 export const shopReducer = shopSlice.reducer;
+
+// Side effect using redux saga
 
 function* fetchShopPage(action: PayloadAction<number>): any {
   try {
@@ -142,7 +148,8 @@ export function* shopSaga() {
   yield takeEvery("shop/fetchShopPage", fetchShopPage);
 }
 
-// REDUX-THUNK
+// Side effect using redux thunk
+
 // export function fetchShopPage(limit: number) {
 //   return async function (dispatch: AppDispatch) {
 //     const resp = await axios.get(
